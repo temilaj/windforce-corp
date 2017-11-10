@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace windforce_corp.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class EmployeesController : Controller
     {
         // GET api/values
         [HttpGet]
