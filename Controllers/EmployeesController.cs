@@ -24,7 +24,8 @@ namespace windforce_corp.Controllers
             };
 
             A.Configure<Employee>()
-                .Fill(x => x.Salary).WithRandom(salaries);
+                .Fill(x => x.Salary).WithRandom(salaries)
+                .Fill(x => x.AvatarUrl).AsPlaceholderImage(200, 200);
 
             var employees = A.ListOf<Employee>(50);
             return Ok(employees);
