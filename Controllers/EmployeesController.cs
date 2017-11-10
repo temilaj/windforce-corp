@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GenFu;
 using Microsoft.AspNetCore.Mvc;
+using windforce_corp.Models;
 
 namespace windforce_corp.Controllers
 {
@@ -11,9 +13,11 @@ namespace windforce_corp.Controllers
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var employees = A.ListOf<Employee>();
+            // return new string[] { "value1", "value2" };
+            return Ok(employees);
         }
 
         // GET api/values/5
@@ -40,5 +44,7 @@ namespace windforce_corp.Controllers
         public void Delete(int id)
         {
         }
+
+        
     }
 }
