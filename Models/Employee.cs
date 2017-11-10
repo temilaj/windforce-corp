@@ -17,7 +17,7 @@ namespace windforce_corp.Models
         }
         [DataType(DataType.Date)]
         public DateTime EmploymentDate { get; set; }
-        public Double Salary { get; set; }
+        public double Salary { get; set; }
   }
     
 }

@@ -15,8 +15,18 @@ namespace windforce_corp.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var employees = A.ListOf<Employee>();
-            // return new string[] { "value1", "value2" };
+            var salaries = new List<Double>() 
+            {
+                45000.00, 
+                40000.00, 
+                35505.12, 
+                61222.01 
+            };
+
+            A.Configure<Employee>()
+                .Fill(x => x.Salary).WithRandom(salaries);
+
+            var employees = A.ListOf<Employee>(50);
             return Ok(employees);
         }
 
