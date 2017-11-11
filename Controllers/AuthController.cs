@@ -41,6 +41,45 @@ namespace windforce_corp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model, string returnUrl = null)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.Email);
+            
+                if (user != null)
+                {
+                    var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation($"{user.Email} logged in.");
+                        var token = BuildToken(user.Id ,user.Email, expirationTime);
+
+                        return Ok(new 
+                        { 
+                            message = "log in successful",
+                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                            user,
+                        });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid Login credentials");
+                        return BadRequest(new { message = "unable to sign user in ", errors = ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(x => x.ErrorMessage) });
+                    }
+                }
+                return BadRequest(new { message = "Invalid Login credentials" });
+            }
+            
+            return BadRequest(new { message = "Oops, you seem to have entered some invalid data", errors = ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(x => x.ErrorMessage)});
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody]SignUpViewModel model, string returnUrl = null)
         {
             if (ModelState.IsValid)

@@ -20,6 +20,7 @@ namespace windforce_corp.Models
         public DateTime EmploymentDate { get; set; }
         public double Salary { get; set; }
         public string AvatarUrl { get; set; }
+        public string Role { get; set; }
   }
     
 }

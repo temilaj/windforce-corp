@@ -23,8 +23,14 @@ namespace windforce_corp.Controllers
                 61222.01 
             };
 
+            var roles = new String[] 
+            {
+                "CEO", "Sales Manager", "Sales Rep", "IT Manager", "IT Engineer"
+            };
+
             A.Configure<Employee>()
                 .Fill(x => x.Salary).WithRandom(salaries)
+                .Fill(x => x.Role).WithRandom(roles)
                 .Fill(x => x.AvatarUrl).AsPlaceholderImage(200, 200);
 
             var employees = A.ListOf<Employee>(50);

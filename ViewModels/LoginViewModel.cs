@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace windforce_corp.ViewModels
 {
-    public class AuthViewModel
+    public class LoginViewModel
     {
         [Required]
         [DataType(DataType.EmailAddress)]
