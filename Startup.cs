@@ -72,7 +72,12 @@ namespace windforce_corp
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure
+        (
+            IApplicationBuilder app, IHostingEnvironment env, 
+            ApplicationDbContext datacontext, 
+            UserManager<ApplicationUser> userManager
+        )
         {
             if (env.IsDevelopment())
             {
@@ -81,6 +86,7 @@ namespace windforce_corp
             app.UseResponseCompression();
             app.UseAuthentication();
             app.UseMvc();
+            DbInitializer.Initialize(datacontext, userManager);
         }
     }
 }

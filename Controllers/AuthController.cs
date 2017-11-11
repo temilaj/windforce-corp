@@ -59,7 +59,7 @@ namespace windforce_corp.Controllers
                         { 
                             message = "log in successful",
                             token = new JwtSecurityTokenHandler().WriteToken(token),
-                            user,
+                            user = MapUser(user),
                         });
                     }
                     else
@@ -87,6 +87,8 @@ namespace windforce_corp.Controllers
                 var user = new ApplicationUser { 
                     Email = model.Email,
                     UserName = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -99,7 +101,7 @@ namespace windforce_corp.Controllers
                     { 
                         message = "sign up successful",
                         token = new JwtSecurityTokenHandler().WriteToken(token),
-                        user,
+                        user = MapUser(user),
                     });
                 }
                 AddErrors(result);
@@ -122,7 +124,17 @@ namespace windforce_corp.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-
+        private UserViewModel MapUser(ApplicationUser user)
+        {
+            return new UserViewModel() 
+            { 
+              Id = user.Id,
+              Email = user.Email,
+              FirstName = user.FirstName,
+              LastName = user.LastName,
+              FullName = user.FullName
+            };
+        }
         private JwtSecurityToken BuildToken(string userId, string email, DateTime expirationTime) 
         {
             var claims = new[]

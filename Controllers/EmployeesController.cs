@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GenFu;
 using Microsoft.AspNetCore.Mvc;
+using windforce_corp.Data;
 using windforce_corp.Models;
 
 namespace windforce_corp.Controllers
@@ -11,37 +12,30 @@ namespace windforce_corp.Controllers
     [Route("api/[controller]")]
     public class EmployeesController : Controller
     {
+        private readonly ApplicationDbContext _datacontext;
+
+        public EmployeesController(ApplicationDbContext datacontext)
+        {
+            _datacontext = datacontext;
+        }
         // GET api/values
         [HttpGet]
         public IActionResult Get()
         {
-            var salaries = new List<Double>() 
-            {
-                45000.00, 
-                40000.00, 
-                35505.12, 
-                61222.01 
-            };
-
-            var roles = new String[] 
-            {
-                "CEO", "Sales Manager", "Sales Rep", "IT Manager", "IT Engineer"
-            };
-
-            A.Configure<Employee>()
-                .Fill(x => x.Salary).WithRandom(salaries)
-                .Fill(x => x.Role).WithRandom(roles)
-                .Fill(x => x.AvatarUrl).AsPlaceholderImage(200, 200);
-
-            var employees = A.ListOf<Employee>(50);
+            var employees = _datacontext.Employees.ToArray();
             return Ok(employees);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            Employee employee = _datacontext.Employees.FirstOrDefault(e => e.Id == id);
+            if (employee == null) 
+            {
+                return NotFound();
+            }
+            return Ok(employee);
         }
 
         // POST api/values
