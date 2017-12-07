@@ -9,41 +9,11 @@ namespace windforce_corp.Data
 {
     public static class DbInitializer
     {
-        public async static void Initialize(ApplicationDbContext datacontext, UserManager<ApplicationUser> _userManager)
+        public static void Initialize(ApplicationDbContext datacontext)
         {
             if (datacontext.Users.Any())
             {
                 return;
-            }
-
-            var users = new ApplicationUser[]
-            {
-                new ApplicationUser()
-                {
-                    UserName = "jundoe",
-                    FirstName = "Jun",
-                    LastName = "Doe",
-                    Email = "jundoe@email.com"
-                },
-                new ApplicationUser()
-                {
-                    UserName = "adewaleokocha@email.com",
-                    FirstName = "Adewale",
-                    LastName = "Okocha",
-                    Email = "adewaleokoca@email.com",
-                },
-                new ApplicationUser()
-                {
-                    UserName = "tolusmith@email.com",
-                    FirstName = "Tolu",
-                    LastName = "Smith",
-                    Email = "tolusmith@email.com",
-                },
-            };
-
-            foreach(var user in users)
-            {
-                await _userManager.CreateAsync(user, "Jundoe");
             }
 
             

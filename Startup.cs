@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using windforce_corp.Data;
-using windforce_corp.Models;
 
 namespace windforce_corp
 {
@@ -32,40 +22,8 @@ namespace windforce_corp
         {
             services.AddMvc();
             
-            services
-                .AddAuthentication()
-                .AddJwtBearer(config =>
-                {
-                    config.RequireHttpsMetadata = false;
-                    config.SaveToken = true;
-                    
-                    config.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidateAudience = true,
-                        ValidIssuer = Configuration["Tokens:Issuer"],
-                        ValidateLifetime = true,
-                        ValidAudience = Configuration["Tokens:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
-                    };
-                    
-                });
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("WindForce"));
-
-             services.AddIdentity<ApplicationUser, IdentityRole>(config => 
-             {
-                config.User.RequireUniqueEmail = true;
-                config.Password.RequiredLength = 6;
-                config.Password.RequireDigit = false;
-                config.Password.RequireLowercase = false;
-                config.Password.RequireUppercase = false;
-                config.Password.RequireNonAlphanumeric = false;
-             })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
 
             services.AddResponseCompression(options =>
             {
@@ -73,11 +31,8 @@ namespace windforce_corp
             });
         }
 
-        public void Configure
-        (
-            IApplicationBuilder app, IHostingEnvironment env, 
-            ApplicationDbContext datacontext, 
-            UserManager<ApplicationUser> userManager
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+            ApplicationDbContext datacontext
         )
         {
             if (env.IsDevelopment())
@@ -85,8 +40,7 @@ namespace windforce_corp
                 app.UseDeveloperExceptionPage();
             }
             app.UseResponseCompression();
-            app.UseAuthentication();
-            // app.UseMvc();
+            app.UseMvc();
             app.Use(async (context, next) =>
             {   
                 if(context.Request.Path == "/api") 
@@ -98,7 +52,7 @@ namespace windforce_corp
                     await next();
                 }
             });
-            DbInitializer.Initialize(datacontext, userManager);
+            DbInitializer.Initialize(datacontext);
         }
     }
 }
