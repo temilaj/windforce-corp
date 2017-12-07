@@ -17,9 +17,16 @@ namespace windforce_corp
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args) {
+
+            return WebHost.CreateDefaultBuilder(args)
+                // .ConfigureAppConfiguration((Context, config) => 
+                    // config.AddJsonFile("appsetting.json"))
+                .ConfigureLogging(loggerFactory => {
+                    loggerFactory.AddConsole();
+                })
                 .UseStartup<Startup>()
                 .Build();
+        }
     }
 }

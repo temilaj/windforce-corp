@@ -15,8 +15,8 @@ using windforce_corp.ViewModels;
 
 namespace windforce_corp.Controllers
 {
-    [Route("api/auth/[action]")]
-    public class AuthController : Controller
+    [Route("api/[controller]/[action]")]
+    public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -24,11 +24,13 @@ namespace windforce_corp.Controllers
         private readonly IConfiguration _configuration;
         private readonly DateTime expirationTime = DateTime.Now.AddDays(1);
         
-        public AuthController(
+        public AuthController
+        (
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<AuthController> logger,
-            IConfiguration configuration)
+            IConfiguration configuration
+        )
         {
             _userManager = userManager;
             _signInManager = signInManager;

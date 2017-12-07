@@ -10,7 +10,7 @@ using windforce_corp.Models;
 namespace windforce_corp.Controllers
 {
     [Route("api/[controller]")]
-    public class EmployeesController : Controller
+    public class EmployeesController : ControllerBase
     {
         private readonly ApplicationDbContext _datacontext;
 
@@ -55,7 +55,5 @@ namespace windforce_corp.Controllers
         public void Delete(int id)
         {
         }
-
-        
     }
 }

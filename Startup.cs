@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -85,7 +86,18 @@ namespace windforce_corp
             }
             app.UseResponseCompression();
             app.UseAuthentication();
-            app.UseMvc();
+            // app.UseMvc();
+            app.Use(async (context, next) =>
+            {   
+                if(context.Request.Path == "/api") 
+                {
+                    await context.Response.WriteAsync("Hello MCT Africa Summit");
+                } 
+                else 
+                {
+                    await next();
+                }
+            });
             DbInitializer.Initialize(datacontext, userManager);
         }
     }
